@@ -56,7 +56,7 @@ router.post('/signin', (req, res) => {
 router.get('/canDelete/:token', (req, res) => {
   User.findOne({ token: req.params.token }).then(data => {
     if (data) {
-      res.json({ result: true, canBookmark: data.canBookmark });
+      res.json({ result: true, canDelete: data.canDelete });
     } else {
       res.json({ result: false, error: 'User not found' });
     }
