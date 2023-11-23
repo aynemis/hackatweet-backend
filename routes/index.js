@@ -7,15 +7,16 @@ const Like = require ('../models/likes')
 
 
 // GET all tweets
-router.get('/', (req,res) => {
-  Tweet.find().then(data =>{
+router.get('/tweets', (req,res) => {
+  Tweet.find().populate('user')
+  .then(data =>{
     res.json({result : true, tweets: data})
   })
 })
 
 
 // POST a tweet
-router.post('/', (req,res) =>{
+router.post('/tweets', (req,res) =>{
   const newTweet = new Tweet({
     user: req.body.userObjectId,
     message: req.body.message,
@@ -29,7 +30,7 @@ router.post('/', (req,res) =>{
 })
 
 // DELETE a tweet 
-router.delete('/', (req,res) => {
+router.delete('/tweets', (req,res) => {
   Tweet.deleteOne({_id:req.body.tweetObjectId})
 .then(() => {
   res.json({result : true, message : "tweet supprimé"})
@@ -37,7 +38,7 @@ router.delete('/', (req,res) => {
 })
 
 // POST hashtag
-router.post('/hashtag', (req,res) => {
+router.post('/tweets/hashtag', (req,res) => {
   const newHashtag = new Hashtag({
     name: req.body.hashtag,
   })
@@ -47,7 +48,7 @@ router.post('/hashtag', (req,res) => {
 });
 
 // GET tweets with hashtag as params
-router.get('/:hashtag', (req, res) => {
+router.get('/tweets/:hashtag', (req, res) => {
   Tweet.find().populate('hashtags')
   .then(data => {
     console.log(data)
@@ -68,7 +69,7 @@ router.get('/:hashtag', (req, res) => {
 
 
 //POST like 
-router.post('/like', (req,res) => {
+router.post('/tweets/like', (req,res) => {
   const newLike = new Like({
     user: req.body.userObjectId,
     tweets: req.body.tweetObjectId
