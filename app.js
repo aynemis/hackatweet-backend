@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
-require('../hackatweet-backend/models/connection')
+require('../backend/models/connection')
 
 
 var indexRouter = require('./routes/index');
