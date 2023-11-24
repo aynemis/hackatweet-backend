@@ -20,18 +20,32 @@ router.post('/tweets', (req,res) =>{
   let tag;
   Hashtag.findOne({name: req.body.hashtagName})
   .then(data => {
-    tag =data.id ; console.log(`hastag id = ${tag}`)
-    const newTweet = new Tweet({
-      user: req.body.userObjectId,
-      message: req.body.message,
-      date: new Date(),
-      hashtags: [tag],
+    if(data === null){
+      const newTag = new Hashtag({
+        name: req.body.hashtagName.toString(),
+      })
+      newTag.save().then(() => {
+        const newTweet = new Tweet({
+          user: req.body.userObjectId,
+          message: req.body.message,
+          date: new Date(),
+          hashtags: [newTag],
+        });
+        newTweet.save().then(() => {
+          res.json({result : true})
+      })
+    })}
+    else{
+      tag =data.id
+      const newTweet = new Tweet({
+        user: req.body.userObjectId,
+        message: req.body.message,
+        date: new Date(),
+        hashtags: [tag], 
     });
-    newTweet.save().then(() => {
-      res.json({result : true})
-    })})
-  
-
+    newTweet.save().then(() => {res.json({result : true})})
+  }
+})
 })
 
 // DELETE a tweet 
