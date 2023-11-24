@@ -17,15 +17,20 @@ router.get('/tweets', (req,res) => {
 
 // POST a tweet
 router.post('/tweets', (req,res) =>{
-  const newTweet = new Tweet({
-    user: req.body.userObjectId,
-    message: req.body.message,
-    date: new Date(),
-    hashtags: req.body.hashtagObjectId,
-  });
-  newTweet.save().then(() => {
-    res.json({result : true})
-  })
+  let tag;
+  Hashtag.findOne({name: req.body.hashtagName})
+  .then(data => {
+    tag =data.id ; console.log(`hastag id = ${tag}`)
+    const newTweet = new Tweet({
+      user: req.body.userObjectId,
+      message: req.body.message,
+      date: new Date(),
+      hashtags: [tag],
+    });
+    newTweet.save().then(() => {
+      res.json({result : true})
+    })})
+  
 
 })
 
