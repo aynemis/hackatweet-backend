@@ -57,9 +57,11 @@ router.get('/tweets/:hashtag', (req, res) => {
       let tagExists = element.hashtags.some((x) => x.name === req.params.hashtag)
       if (tagExists) {
       results.push(element)
+      console.log(`element ${element}`)
+      
     }
   })
-    if(results !== []){
+    if(results.length !== 0){
       res.json({ result: true, tweets : results });
     } else {
       res.json({ result: false, error: 'No hashtag found' });
@@ -67,7 +69,14 @@ router.get('/tweets/:hashtag', (req, res) => {
   })
 })
 
-
+// GET hashtags
+router.get('/hashtags', (req,res) => {
+  Hashtag.find()
+  .then(data =>{
+    res.json({result : true, hashtags: data.map((e) => e.name)})
+  })
+})
+ 
 //POST like 
 router.post('/tweets/like', (req,res) => {
   const newLike = new Like({
